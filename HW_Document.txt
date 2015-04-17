@@ -1,0 +1,70 @@
+EMBEDDED FIRMWARE ESSENTIALS -HW01
+
+HOURS SPENT:  
+            Spent around 5-6 hours setting up the environment on virtual machine
+            Spent 4 hours reading about LPC17xx GPIO PORTS,Registers and configuration for                     	output function of a GPIO 
+            Spent 3 hours with the setting up libraries and compiling the GPIO code
+           
+II week:  Spent 4-6 hours—- 
+   tried to read the ARM instruction set to understand the disassembled code 
+
+
+              
+GPIO Configuration- Control a GPIO Pin 
+- The pin allocated for me Pin 26 corresponds to Port 3[26] pin on the board.
+According to the LPC17xx User manual (UM10360), the pin output state can be controlled by  writing a value to “FIOPIN” register directly and 
+ FIOSET = 0x040000000 
+ FIOCLR = 0x040000000  
+
+Configure the PINSEL7 register for (port 3) to be set so as to enable the port 3 higher level bits to function as GPIO . the address of this reg = 0x4002C000
+Then the program of set the FIO1DIR register = 0x2009C060 to config led pin as output.
+
+  using FIOSET for port 3-FIO3SET                   FIO3SET | = 0X04000000
+  and to clear the value using  FIO3CLR             FIO3CLR | = 0x04000000 
+
+  
+ Disassembled code :
+
+00000000 <main> :
+
+6 : 2303	movs	r3, #3                             ////uint32_t port =3 
+8:  60bb	str	r3, [r7,#8]
+a:  231a	movs   r3, #26			   /////uint32_t pin=26
+c:  607b	str 	r3, [r7,#4]
+
+/////init_gpio(port , pin, 1);
+
+e:  68bb	ldr	r3,  [r7,#8]     ////loading the value into registers
+10: b2da	uxtb	r2,r3
+12:  687b	ldr	r3, [r7,#4]
+
+
+7c:  4002c000	.word	0x4002c000	////initializing memory of 4-byte with the address
+80:  2009c060  .word	0x2009c060	/// PINSEL7 =0x4002c000 & GPIO3 = 0x2009c060
+
+
+
+a4: d006	ldr   r3, [pc,#36] <set_gpio>+0x48)
+a6: 4b09           ldr r2, [pc,#32]   <set_gpio>+0x48
+
+/////the struct gpio_base sets up so that when it is aligned in the base address ,each of the structs field will align with a particular register
+
+
+///// set_gpio(port,pin,mask_value)
+
+24: 68bb	ldr	r3, [r7,#8]      //referring to the store in port 3
+26: b2d9	uxtb	r1,r3
+28: 687b	ldr	r3,[r7,#4]       
+2a: b2da          uxtb	r2,r3
+
+
+34:  b2d9	str  r1, [r3]         ///turn bit FIODIR SET & FIOCLR  
+    
+38:   4608        str  r1, [r2,#0] 
+
+
+After the I/O lines are configured as outputs, the code goes into an infinite loop that turns one pin on and off continuously .   
+
+
+
+
