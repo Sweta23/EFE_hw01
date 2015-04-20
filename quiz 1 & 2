@@ -1,0 +1,111 @@
+Quiz-1
+
+Embedded Firmware Essentials, Quiz#1
+
+Ref: http://cslibrary.stanford.edu/101/EssentialC.pdf
+What is the output of the following code? (Given: sizeof(unsigned int)  is 4) Page 34
+
+unsigned int Arr[16];
+unsigned int a0 = (unsigned int) &Arr[0];
+unsigned int a3 = (unsigned int) &Arr[3];
+printf(“%d\n”, a3 – a0); 
+
+    ans:   output- 12
+    Since address of nth element = address of 0th element + (n*element_size_in_bytes)
+    so address difference of a3-a0 = 12bytes.
+
+What is wrong with this line code (if any)?
+unsigned int Arr[16];
+3[Arr] = 7;  
+
+Explain: 
+    output : 7 .    If we print 3[Arr]
+    Referencing the 4th element of an array can be written as 3[Arr] which is same as Arr[3].
+
+Q4 What is the difference between the following 3 statement?
+
+const int * px;
+int const * px;
+int * const px;
+
+case1:
+int x = 13;
+const int * px;
+px = & x;
+
+case 2:
+int x = 13;
+int const * px;
+px = & x;
+
+case 3:
+int x = 13;
+int * const px;
+px = & x;
+    ans:  const int *px  and int const *px mean the same that is px is a variable pointer to a constant integer.
+    int x=13;
+    int const *px = &x; 
+    int const *py=&y;
+    *py =14; //error
+
+
+    int *const px -declares px is constant pointer to a variable integer. that is it cannot point to other variable.
+    in case 3:    int x=13;
+	       int y=14;
+	       int *const px=&x;
+	 but   px=&y;       //Error 
+
+Write a swap function in C. (p28)
+            ans: 
+                void swap(unsigned int * px, unsigned int *py) {
+                unsigned int temp;
+                temp = *px;
+                *px = * py;
+                *py = temp;
+                }
+                
+                
+                
+EMBEDDED FIRMWARE ESSENTIALS QUIZ 2 
+
+BEGIN
+--------------------------------------------------------------------
+Q1: How many microcontrollers in the mbed LPC1768 board?
+
+A 32-bit ARM Cortex M3 micro controller and USB interface micro controller on the LPC1768 board.
+
+
+
+--------------------------------------------------------------------
+Q2: What is the size (in GB) of the Flash Memory ("USB Dsik") of the LPC1768?
+
+1GB = 1000 MB
+1.96MB = 0.0019 GB
+
+
+--------------------------------------------------------------------
+Q3: Name 3 functions (or features) that mbed USB cable provided:
+
+1.  5V supply
+2.  Firmware download
+3.  USB interface for debugging
+
+
+--------------------------------------------------------------------
+Q4: What is the name of the Ethernet PHY chip in the mbed board (LPC1768)?
+
+ The name of the Ethernet card is DP83848J manufacturer Texas Instruments
+
+
+
+--------------------------------------------------------------------
+Q5: Reference LPC17xx_UM10360.pdf (Chapter 2)
+    What are the GPIO address window?
+
+The address range of GPIO  0x2009 C000 -0x2009 FFFF
+
+
+
+END
+
+                
